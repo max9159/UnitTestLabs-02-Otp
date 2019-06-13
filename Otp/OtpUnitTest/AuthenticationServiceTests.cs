@@ -1,3 +1,4 @@
+using NSubstitute;
 using NUnit.Framework;
 using Otp;
 
@@ -17,10 +18,16 @@ namespace OtpUnitTest
         public void IsValidTest_Password_Is_Valid()
         {
             //Arrange
-            _authenticationService = new AuthenticationService( new ProfileForTest() , new TokenForTest() );
+            var profileForTest = Substitute.For<IProfile>();
+            profileForTest.GetPassword( "ouch" ).Returns( "1978" );
+
+            var tokenForTest = Substitute.For<IToken>();
+            tokenForTest.GetRandom( string.Empty ).ReturnsForAnyArgs( "000000" );
+
+            _authenticationService = new AuthenticationService( profileForTest , tokenForTest );
 
             //Action
-            var actual = _authenticationService.IsValid( "ouch" , "197800000" );
+            var actual = _authenticationService.IsValid( "ouch" , "1978000000" );
 
             //Assert
             Assert.AreEqual( true , actual );
@@ -30,34 +37,19 @@ namespace OtpUnitTest
         public void IsValidTest_Password_Is_Invalid()
         {
             //Arrange
-            _authenticationService = new AuthenticationService( new ProfileForTest() , new TokenForTest() );
+            var profileForTest = Substitute.For<IProfile>();
+            profileForTest.GetPassword( "ouch" ).Returns( "1978" );
+
+            var tokenForTest = Substitute.For<IToken>();
+            tokenForTest.GetRandom( string.Empty ).ReturnsForAnyArgs( "000000" );
+
+            _authenticationService = new AuthenticationService( profileForTest , tokenForTest );
 
             //Action
             var actual = _authenticationService.IsValid( "ouch" , "1234" );
 
             //Assert
             Assert.AreEqual( false , actual );
-        }
-    }
-
-    public class TokenForTest : IToken
-    {
-        public string GetRandom( string account )
-        {
-            return "00000";
-        }
-    }
-
-    public class ProfileForTest : IProfile
-    {
-        public string GetPassword( string account )
-        {
-            if( account == "ouch" )
-            {
-                return "1978";
-            }
-
-            return string.Empty;
         }
     }
 }
