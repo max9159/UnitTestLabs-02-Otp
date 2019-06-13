@@ -1,6 +1,6 @@
 ﻿namespace Otp
 {
-    public class ProfileDao
+    public class ProfileDao : IProfile
     {
         public string GetPassword( string account )
         {

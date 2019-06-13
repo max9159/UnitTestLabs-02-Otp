@@ -2,7 +2,7 @@
 
 namespace Otp
 {
-    public class RsaTokenDao
+    public class RsaTokenDao : IToken
     {
         public string GetRandom( string account )
         {
