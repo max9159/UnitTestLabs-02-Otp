@@ -5,39 +5,47 @@ namespace OtpUnitTest
 {
     public class AuthenticationServiceTests
     {
+        private string _account;
         private AuthenticationService _authenticationService;
-
+        private string _password;
+        private ProfileForTest _profileForTest;
+        private TokenForTest _tokenForTest;
 
         [SetUp]
         public void Setup()
         {
+            _profileForTest = new ProfileForTest();
+            _tokenForTest = new TokenForTest();
+            _authenticationService = new AuthenticationService( _profileForTest , _tokenForTest );
         }
 
         [Test]
         public void IsValidTest_Password_Is_Valid()
         {
-            //Arrange
-            _authenticationService = new AuthenticationService( new ProfileForTest() , new TokenForTest() );
+            GivenAccountAndPassword( "ouch" , "197800000" );
 
-            //Action
-            var actual = _authenticationService.IsValid( "ouch" , "197800000" );
-
-            //Assert
-            Assert.AreEqual( true , actual );
+            ShouldReturn( true );
         }
 
         [Test]
         public void IsValidTest_Password_Is_Invalid()
         {
-            //Arrange
-            _authenticationService = new AuthenticationService( new ProfileForTest() , new TokenForTest() );
+            GivenAccountAndPassword( "ouch" , "1978" );
 
-            //Action
-            var actual = _authenticationService.IsValid( "ouch" , "1234" );
-
-            //Assert
-            Assert.AreEqual( false , actual );
+            ShouldReturn( false );
         }
+
+        private void ShouldReturn( bool isValid )
+        {
+            Assert.AreEqual( isValid , _authenticationService.IsValid( _account , _password ) );
+        }
+
+        private void GivenAccountAndPassword( string account , string password )
+        {
+            _account = account;
+            _password = password;
+        }
+
     }
 
     public class TokenForTest : IToken
