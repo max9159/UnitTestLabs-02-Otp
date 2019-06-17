@@ -2,7 +2,7 @@
 {
     public class ProfileDao
     {
-        public string GetPassword( string account )
+        public virtual string GetPassword( string account )
         {
             return Context.GetPassword( account );
         }

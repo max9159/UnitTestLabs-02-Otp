@@ -4,7 +4,7 @@ namespace Otp
 {
     public class RsaTokenDao
     {
-        public string GetRandom( string account )
+        public virtual string GetRandom( string account )
         {
             var seed = new Random( Guid.NewGuid().GetHashCode() );
             var result = seed.Next( 0 , 999999 ).ToString( "000000" );
