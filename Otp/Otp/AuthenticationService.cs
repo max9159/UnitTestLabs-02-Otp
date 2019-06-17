@@ -28,7 +28,14 @@
             // 驗證傳入的 password 是否等於自訂密碼 + RSA token亂數
             var validPassword = passwordFromDao + randomCode;
 
-            return password == validPassword ? true : false;
+            bool isValid = password == validPassword;
+
+            if( isValid == false )
+            {
+                new ConsoleLog().Save( $"Account:{account} tried to login failed." );
+            }
+
+            return isValid;
         }
     }
 }
