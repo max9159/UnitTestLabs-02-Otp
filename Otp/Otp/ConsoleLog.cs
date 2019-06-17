@@ -2,7 +2,7 @@
 
 namespace Otp
 {
-    public class ConsoleLog
+    public class ConsoleLog : ILog
     {
         public void Save( string message )
         {

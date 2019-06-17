@@ -4,17 +4,20 @@
     {
         private IProfile _profileDao;
         private IToken _rsaTokenDao;
+        private ILog _logger;
 
         public AuthenticationService()
         {
             _profileDao = new ProfileDao();
             _rsaTokenDao = new RsaTokenDao();
+            _logger = new ConsoleLog();
         }
 
-        public AuthenticationService( IProfile profileDao , IToken rsaTokenDao )
+        public AuthenticationService( IProfile profileDao , IToken rsaTokenDao , ILog logger )
         {
             _profileDao = profileDao;
             _rsaTokenDao = rsaTokenDao;
+            _logger = logger;
         }
 
         public bool IsValid( string account , string password )
@@ -32,7 +35,7 @@
 
             if( isValid == false )
             {
-                new ConsoleLog().Save( $"Account:{account} tried to login failed." );
+                _logger.Save( $"Account:{account} tried to login failed." );
             }
 
             return isValid;
