@@ -20,12 +20,16 @@ namespace Otp.Test
             var token = Substitute.For<IRsaTokenDao>();
             token.GetRandom("Max").Returns("random");
 
-            var target = new AuthenticationService(profile, token);
+            var log = Substitute.For<IConsoleLog>();
+
+            var target = new AuthenticationService(profile, token, log);
+
             const string account = "Max";
             const string password = "tryError";
 
             //act
             var actual = target.IsValid(account, password);
+            log.Received(1).Save("account:Max tried to login failed.");
 
             // assert
             Assert.IsFalse(actual);
@@ -41,7 +45,10 @@ namespace Otp.Test
             var token = Substitute.For<IRsaTokenDao>();
             token.GetRandom("Max").Returns("random");
 
-            var target = new AuthenticationService(profile, token);
+            var log = Substitute.For<IConsoleLog>();
+            log.Received(0).Save("account:Max try to login failed");
+
+            var target = new AuthenticationService(profile, token, log);
             const string account = "Max";
             const string password = "9159random";
 

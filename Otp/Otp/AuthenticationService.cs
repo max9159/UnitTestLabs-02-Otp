@@ -4,11 +4,14 @@
     {
         private IProfile _profile;
         private IRsaTokenDao _token;
+        private IConsoleLog _consoleLog;
 
-        public AuthenticationService(IProfile profile, IRsaTokenDao token)
+        public AuthenticationService(IProfile profile, IRsaTokenDao token, IConsoleLog consoleLog)
         {
+            _consoleLog = consoleLog;
             _profile = profile;
             _token = token;
+
         }
 
         public bool IsValid( string account , string password )
@@ -22,7 +25,12 @@
             // 驗證傳入的 password 是否等於自訂密碼 + RSA token亂數
             var validPassword = passwordFromDao + randomCode;
 
-            return password == validPassword ? true : false;
+            var isValid = password == validPassword ? true : false;
+            if (!isValid)
+            {
+                _consoleLog.Save($"account:{account} tried to login failed.");
+            }
+            return isValid;
         }
     }
 }
