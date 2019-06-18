@@ -47,7 +47,8 @@ namespace Otp.Test
             token.GetRandom("Max").Returns("random");
 
             var log = Substitute.For<IConsoleLog>();
-            log.Received(0).Save("account:Max try to login failed");
+            log.Received(0).Save(null);
+            log.DidNotReceive().Save(null);
 
             var target = new AuthenticationService(profile, token, log);
             const string account = "Max";
