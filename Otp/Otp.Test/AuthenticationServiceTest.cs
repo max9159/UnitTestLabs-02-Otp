@@ -30,6 +30,7 @@ namespace Otp.Test
             //act
             var actual = target.IsValid(account, password);
             log.Received(1).Save("account:Max tried to login failed.");
+            log.Received(1).Save(Arg.Is<string>(x => x.Contains("failed")));
 
             // assert
             Assert.IsFalse(actual);
